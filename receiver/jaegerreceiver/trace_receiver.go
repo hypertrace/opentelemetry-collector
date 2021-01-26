@@ -452,6 +452,14 @@ func toMetadata(header http.Header) metadata.MD {
 	return md
 }
 
+func toMetadata(header http.Header) metadata.MD {
+	md := metadata.MD{}
+	for k, v := range header {
+		md.Append(k, v...)
+	}
+	return md
+}
+
 func (jr *jReceiver) startCollector(host component.Host) error {
 	if !jr.collectorGRPCEnabled() && !jr.collectorHTTPEnabled() {
 		return nil
