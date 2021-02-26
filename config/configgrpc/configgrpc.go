@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"net"
 	"strings"
-	"sync"
 	"time"
 
 	"google.golang.org/grpc"
@@ -52,7 +51,6 @@ var (
 
 var (
 	clientOptionHandlerList = make([]ClientDialOptionHandler, 0)
-	mu                      sync.Mutex
 )
 
 // Allowed balancer names to be set in grpclb_policy to discover the servers
@@ -231,14 +229,12 @@ func (gcs *GRPCClientSettings) ToDialOptions() ([]grpc.DialOption, error) {
 	}
 
 	if !gcs.SkipGlobalClientOption {
-		mu.Lock()
 		for _, handler := range clientOptionHandlerList {
 			opt := handler()
 			if opt != nil {
 				opts = append(opts, opt)
 			}
 		}
-		mu.Unlock()
 	}
 
 	return opts, nil
@@ -335,8 +331,6 @@ func GetGRPCCompressionKey(compressionType string) string {
 }
 
 func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
-	mu.Lock()
-	defer mu.Unlock()
 	for _, handler := range handlers {
 		clientOptionHandlerList = append(clientOptionHandlerList, handler)
 	}
