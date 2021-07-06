@@ -538,3 +538,15 @@ func tempSocketName(t *testing.T) string {
 	require.NoError(t, os.Remove(socket))
 	return socket
 }
+
+func TestRegisterClientDialOptionHandler(t *testing.T) {
+	RegisterClientDialOptionHandlers(func() grpc.DialOption {
+		return grpc.WithUnaryInterceptor(func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+			return invoker(ctx, method, req, reply, cc, opts...)
+		})
+	})
+	gcs := &GRPCClientSettings{}
+	opts, err := gcs.ToDialOptions()
+	assert.NoError(t, err)
+	assert.Len(t, opts, 2)
+}
