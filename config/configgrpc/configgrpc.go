@@ -41,11 +41,15 @@ const (
 	CompressionGzip        = "gzip"
 )
 
+type ClientDialOptionHandler func() grpc.DialOption
+
 var (
 	// Map of opentelemetry compression types to grpc registered compression types.
 	gRPCCompressionKeyMap = map[string]string{
 		CompressionGzip: gzip.Name,
 	}
+
+	clientOptionHandlerList = make([]ClientDialOptionHandler, 0)
 )
 
 // Allowed balancer names to be set in grpclb_policy to discover the servers.
@@ -99,6 +103,9 @@ type GRPCClientSettings struct {
 
 	// Auth configuration for outgoing RPCs.
 	Auth *configauth.Authentication `mapstructure:"auth,omitempty"`
+
+	// UseGlobalInterceptors defines config if the global client interceptors need to be used
+	SkipGlobalClientOption bool `mapstructure:"skip_global_client_option"`
 }
 
 // KeepaliveServerConfig is the configuration for keepalive.
@@ -246,6 +253,15 @@ func (gcs *GRPCClientSettings) ToDialOptions(host component.Host) ([]grpc.DialOp
 	opts = append(opts, grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()))
 	opts = append(opts, grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()))
 
+	if !gcs.SkipGlobalClientOption {
+		for _, handler := range clientOptionHandlerList {
+			opt := handler()
+			if opt != nil {
+				opts = append(opts, opt)
+			}
+		}
+	}
+
 	return opts, nil
 }
 
@@ -360,4 +376,8 @@ func GetGRPCCompressionKey(compressionType string) string {
 		return encodingKey
 	}
 	return CompressionUnsupported
+}
+
+func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
+	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }

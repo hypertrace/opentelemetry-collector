@@ -539,12 +539,3 @@ func tempSocketName(t *testing.T) string {
 	require.NoError(t, os.Remove(socket))
 	return socket
 }
-
-type mockHost struct {
-	component.Host
-	ext map[config.ComponentID]component.Extension
-}
-
-func (nh *mockHost) GetExtensions() map[config.ComponentID]component.Extension {
-	return nh.ext
-}
