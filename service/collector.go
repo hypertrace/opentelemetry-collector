@@ -169,6 +169,13 @@ LOOP:
 	return col.shutdown(ctx)
 }
 
+// ConfigPostProcessor allows to intercept the final config and do changes in the factories or
+// pipelines. For further information refer to the issue:
+// https://github.com/open-telemetry/opentelemetry-collector/issues/3023
+type ConfigPostProcessor interface {
+	Process(c *config.Config)
+}
+
 // setupConfigurationComponents loads the config and starts the components. If all the steps succeeds it
 // sets the col.service with the service currently running.
 func (col *Collector) setupConfigurationComponents(ctx context.Context) error {
@@ -181,6 +188,11 @@ func (col *Collector) setupConfigurationComponents(ctx context.Context) error {
 
 	if col.logger, err = telemetrylogs.NewLogger(col.cfgW.cfg.Service.Telemetry.Logs, col.set.LoggingOptions); err != nil {
 		return fmt.Errorf("failed to get logger: %w", err)
+	}
+
+	if postProcessor, ok := col.set.ConfigMapProvider.(ConfigPostProcessor); ok {
+		// Here we modify the config to be able to manipulate processors and pipelines
+		postProcessor.Process(cfg)
 	}
 
 	col.logger.Info("Applying configuration...")

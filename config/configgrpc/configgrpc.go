@@ -58,10 +58,6 @@ var (
 	clientOptionHandlerList = make([]ClientDialOptionHandler, 0)
 )
 
-var (
-	clientOptionHandlerList = make([]ClientDialOptionHandler, 0)
-)
-
 // Allowed balancer names to be set in grpclb_policy to discover the servers.
 var allowedBalancerNames = []string{roundrobin.Name, grpc.PickFirstBalancerName}
 
