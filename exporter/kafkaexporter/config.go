@@ -44,6 +44,9 @@ type Config struct {
 
 	// Authentication defines used authentication mechanism.
 	Authentication Authentication `mapstructure:"auth"`
+
+	// Compression defines the compression method and compression level, if applicable.
+	Compression Compression `mapstructure:"compression"`
 }
 
 // Metadata defines configuration for retrieving metadata from the broker.
