@@ -40,6 +40,7 @@ func TestLoadConfig(t *testing.T) {
 	e0 := cfg.Exporters[config.NewID(typeStr)]
 	assert.Equal(t, e0, factory.CreateDefaultConfig())
 
+<<<<<<< HEAD:exporter/loggingexporter/config_test.go
 	e1 := cfg.Exporters[config.NewIDWithName(typeStr, "2")]
 	assert.Equal(t, e1,
 		&Config{
@@ -48,4 +49,44 @@ func TestLoadConfig(t *testing.T) {
 			SamplingInitial:    10,
 			SamplingThereafter: 50,
 		})
+=======
+	c := cfg.Exporters[config.NewID(typeStr)].(*Config)
+	assert.Equal(t, &Config{
+		ExporterSettings: config.NewExporterSettings(config.NewID(typeStr)),
+		TimeoutSettings: exporterhelper.TimeoutSettings{
+			Timeout: 10 * time.Second,
+		},
+		RetrySettings: exporterhelper.RetrySettings{
+			Enabled:         true,
+			InitialInterval: 10 * time.Second,
+			MaxInterval:     1 * time.Minute,
+			MaxElapsedTime:  10 * time.Minute,
+		},
+		QueueSettings: exporterhelper.QueueSettings{
+			Enabled:      true,
+			NumConsumers: 2,
+			QueueSize:    10,
+		},
+		Topic:    "spans",
+		Encoding: "otlp_proto",
+		Brokers:  []string{"foo:123", "bar:456"},
+		Authentication: Authentication{
+			PlainText: &PlainTextConfig{
+				Username: "jdoe",
+				Password: "pass",
+			},
+		},
+		Metadata: Metadata{
+			Full: false,
+			Retry: MetadataRetry{
+				Max:     15,
+				Backoff: defaultMetadataRetryBackoff,
+			},
+		},
+		Compression: Compression{
+			Codec: "gzip",
+			Level: 8,
+		},
+	}, c)
+>>>>>>> Support for compression configs (#47):exporter/kafkaexporter/config_test.go
 }
