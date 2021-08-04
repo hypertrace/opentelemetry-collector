@@ -47,6 +47,10 @@ type Config struct {
 
 	// Compression defines the compression method and compression level, if applicable.
 	Compression Compression `mapstructure:"compression"`
+
+	// Kafka Producer Configs for Sarama Client, Note: Compression configs for kafka producer is handled in Compression
+
+	KafkaProducerConfigs kafkaProducerConfigs `mapstructure:"kafkaProducerConfigs"`
 }
 
 // Metadata defines configuration for retrieving metadata from the broker.

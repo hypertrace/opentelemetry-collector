@@ -25,6 +25,10 @@ exporters:
     compression:
       codec: gzip
       level: 8
+    kafkaProducerConfigs:
+      flush: 
+        bytes: 10000
+        frequency: 10000
 
 processors:
   nop:

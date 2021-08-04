@@ -75,5 +75,11 @@ func TestLoadConfig(t *testing.T) {
 			Codec: "gzip",
 			Level: 8,
 		},
+		KafkaProducerConfigs: kafkaProducerConfigs{
+			Flush: Flush{
+				Bytes:     10000,
+				Frequency: 10000,
+			},
+		},
 	}, c)
 }
