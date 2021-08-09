@@ -74,9 +74,5 @@ func TestLoadConfig(t *testing.T) {
 				Backoff: defaultMetadataRetryBackoff,
 			},
 		},
-		Compression: Compression{
-			Codec: "gzip",
-			Level: 8,
-		},
 	}, c)
 }
