@@ -553,7 +553,8 @@ func TestRegisterClientDialOptionHandler(t *testing.T) {
 		})
 	})
 	gcs := &GRPCClientSettings{}
-	opts, err := gcs.ToDialOptions()
+	opts, err := gcs.ToDialOptions(map[config.ComponentID]component.Extension{})
 	assert.NoError(t, err)
-	assert.Len(t, opts, 2)
+	// Also count opentelemetry's observability plugin interceptors
+	assert.Len(t, opts, 4)
 }

@@ -388,7 +388,5 @@ func GetGRPCCompressionKey(compressionType string) string {
 }
 
 func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
-	for _, handler := range handlers {
-		clientOptionHandlerList = append(clientOptionHandlerList, handler)
-	}
+	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
