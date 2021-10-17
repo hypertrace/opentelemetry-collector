@@ -13,7 +13,6 @@ git fetch --all
 git checkout latest+patches
 git pull --rebase upstream refs/tags/v0.29.0
 # make lint test
-git push origin latest+patches
 git tag -a "v0.29.0+patches" -m "Release v0.29.0"
 git push --tags
 ```
