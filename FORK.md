@@ -6,13 +6,14 @@ This fork was created to be able to early patch open-telemetry/opentelemetry-col
 
 For every opentelemetry-collector release we create a new release including our own patches. For example for version v0.20.0 we in open-telemetry/opentelemetry-collector we will crease v0.20.0+patches. This make sure we stick to a version in our downstream dependencies.
 
-Whenever we need a new release on this repository we rebase the branch `latest+patches` version against the new release for 
-open-telemetry/opentelemetry-collector and then get a new release. For example on version `v0.22.0`:
+Whenever we need a new release on this repository we rebase the branch `latest+patches` version against the new release for open-telemetry/opentelemetry-collector and then get a new release. For example on version `v0.22.0` (asuming `origin` is `git@github.com:hypertrace/opentelemetry-collector.git` and `upstream` is `git@github.com:open-telemetry/opentelemetry-collector.git`):
 
 ```bash
 git fetch --all
 git checkout latest+patches
 git pull --rebase upstream refs/tags/v0.29.0
+# make lint test
+git push origin latest+patches
 git tag -a "v0.29.0+patches" -m "Release v0.29.0"
 git push --tags
 ```
