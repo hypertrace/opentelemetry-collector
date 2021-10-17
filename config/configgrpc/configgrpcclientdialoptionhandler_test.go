@@ -6,9 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/grpc"
+
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config"
-	"google.golang.org/grpc"
 )
 
 type mockHost struct {
