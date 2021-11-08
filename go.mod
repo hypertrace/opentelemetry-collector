@@ -6,7 +6,6 @@ require (
 	contrib.go.opencensus.io/exporter/prometheus v0.3.0
 	github.com/Shopify/sarama v1.29.1
 	github.com/StackExchange/wmi v1.2.1 // indirect
-	github.com/pquerna/cachecontrol v0.1.0 // indirect
 	github.com/antonmedv/expr v1.9.0
 	github.com/apache/thrift v0.14.2
 	github.com/cenkalti/backoff/v4 v4.1.1
@@ -58,7 +57,7 @@ require (
 	golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1
 	golang.org/x/text v0.3.7
 	google.golang.org/genproto v0.0.0-20210604141403-392c879c8b08
-	google.golang.org/grpc v1.40.0
+	google.golang.org/grpc v1.42.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v2 v2.4.0
 )
