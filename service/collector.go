@@ -34,6 +34,7 @@ import (
 	"go.uber.org/zap"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/config/configunmarshaler"
 	"go.opentelemetry.io/collector/extension/ballastextension"
 	"go.opentelemetry.io/collector/service/internal"
@@ -192,7 +193,7 @@ func (col *Collector) setupConfigurationComponents(ctx context.Context) error {
 
 	if postProcessor, ok := col.set.ConfigMapProvider.(ConfigPostProcessor); ok {
 		// Here we modify the config to be able to manipulate processors and pipelines
-		postProcessor.Process(cfg)
+		postProcessor.Process(col.cfgW.cfg)
 	}
 
 	col.logger.Info("Applying configuration...")
