@@ -6,7 +6,6 @@ require (
 	contrib.go.opencensus.io/exporter/prometheus v0.3.0
 	github.com/Shopify/sarama v1.29.1
 	github.com/StackExchange/wmi v1.2.1 // indirect
-	github.com/pquerna/cachecontrol v0.1.0 // indirect
 	github.com/antonmedv/expr v1.9.0
 	github.com/apache/thrift v0.14.2
 	github.com/cenkalti/backoff/v4 v4.1.1
@@ -23,7 +22,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/jaegertracing/jaeger v1.25.0
-	github.com/knadh/koanf v1.2.1
+	github.com/knadh/koanf v1.4.0
 	github.com/leoluk/perflib_exporter v0.1.0
 	github.com/magiconair/properties v1.8.5
 	github.com/mitchellh/mapstructure v1.4.1
