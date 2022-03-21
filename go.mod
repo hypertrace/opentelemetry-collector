@@ -33,7 +33,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v0.26.0
 	go.opentelemetry.io/otel/trace v1.3.0
 	go.uber.org/atomic v1.9.0
-	go.uber.org/multierr v1.7.0
+	go.uber.org/multierr v1.8.0
 	go.uber.org/zap v1.20.0
 	golang.org/x/sys v0.0.0-20220111092808-5a964db01320
 	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa
