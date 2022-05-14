@@ -29,7 +29,6 @@ import (
 	"go.uber.org/zap"
 
 	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/extension/ballastextension"
 	"go.opentelemetry.io/collector/featuregate"
 	"go.opentelemetry.io/collector/service/internal/telemetrylogs"
