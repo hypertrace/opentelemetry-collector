@@ -91,11 +91,7 @@ type GRPCClientSettings struct {
 	BalancerName string `mapstructure:"balancer_name"`
 
 	// Auth configuration for outgoing RPCs.
-<<<<<<< HEAD
 	Auth *configauth.Authentication `mapstructure:"auth,omitempty"`
-=======
-	Auth *configauth.Authentication `mapstructure:"auth"`
->>>>>>> feat: custom changes in config/configgrpc and service
 
 	// SkipGlobalClientOption defines config if the global client interceptors need to be used
 	SkipGlobalClientOption bool `mapstructure:"skip_global_client_option"`
@@ -479,9 +475,15 @@ func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
 	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat: custom changes in config/configgrpc and service
 
 func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
 	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
+<<<<<<< HEAD
+=======
+>>>>>>> feat: custom changes in config/configgrpc and service
 =======
 >>>>>>> feat: custom changes in config/configgrpc and service
