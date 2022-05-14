@@ -49,6 +49,10 @@ import (
 
 var errMetadataNotFound = errors.New("no request metadata found")
 
+type ClientDialOptionHandler func() grpc.DialOption
+
+var clientOptionHandlerList = make([]ClientDialOptionHandler, 0)
+
 // Allowed balancer names to be set in grpclb_policy to discover the servers.
 var allowedBalancerNames = []string{roundrobin.Name, grpc.PickFirstBalancerName}
 
@@ -99,6 +103,9 @@ type GRPCClientSettings struct {
 
 	// Auth configuration for outgoing RPCs.
 	Auth *configauth.Authentication `mapstructure:"auth"`
+
+	// SkipGlobalClientOption defines config if the global client interceptors need to be used
+	SkipGlobalClientOption bool `mapstructure:"skip_global_client_option"`
 }
 
 // KeepaliveServerConfig is the configuration for keepalive.
@@ -267,6 +274,15 @@ func (gcs *GRPCClientSettings) toDialOptions(host component.Host, settings compo
 	// Enable OpenTelemetry observability plugin.
 	opts = append(opts, grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor(otelOpts...)))
 	opts = append(opts, grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor(otelOpts...)))
+
+	if !gcs.SkipGlobalClientOption {
+		for _, handler := range clientOptionHandlerList {
+			opt := handler()
+			if opt != nil {
+				opts = append(opts, opt)
+			}
+		}
+	}
 
 	return opts, nil
 }
@@ -464,4 +480,8 @@ func authStreamServerInterceptor(srv any, stream grpc.ServerStream, _ *grpc.Stre
 	}
 
 	return handler(srv, wrapServerStream(ctx, stream))
+}
+
+func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
+	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
