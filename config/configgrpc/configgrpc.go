@@ -99,7 +99,7 @@ type GRPCClientSettings struct {
 	BalancerName string `mapstructure:"balancer_name"`
 
 	// Auth configuration for outgoing RPCs.
-	Auth *configauth.Authentication `mapstructure:"auth"`
+	Auth *configauth.Authentication `mapstructure:"auth,omitempty"`
 
 	// SkipGlobalClientOption defines config if the global client interceptors need to be used
 	SkipGlobalClientOption bool `mapstructure:"skip_global_client_option"`
@@ -454,6 +454,10 @@ func authStreamServerInterceptor(srv interface{}, stream grpc.ServerStream, _ *g
 	}
 
 	return handler(srv, wrapServerStream(ctx, stream))
+}
+
+func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
+	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
 
 func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
