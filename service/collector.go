@@ -29,6 +29,7 @@ import (
 	"go.uber.org/zap"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/extension/ballastextension"
 	"go.opentelemetry.io/collector/featuregate"
 	"go.opentelemetry.io/collector/service/internal/telemetrylogs"
@@ -120,6 +121,13 @@ func (col *Collector) Shutdown() {
 		}()
 		close(col.shutdownChan)
 	}
+}
+
+// ConfigPostProcessor allows to intercept the final config and do changes in the factories or
+// pipelines. For further information refer to the issue:
+// https://github.com/open-telemetry/opentelemetry-collector/issues/3023
+type ConfigPostProcessor interface {
+	Process(c *config.Config)
 }
 
 // ConfigPostProcessor allows to intercept the final config and do changes in the factories or
