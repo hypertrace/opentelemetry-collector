@@ -485,11 +485,3 @@ func authStreamServerInterceptor(srv interface{}, stream grpc.ServerStream, _ *g
 func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
 	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
-
-func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
-	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
-}
-
-func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
-	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
-}
