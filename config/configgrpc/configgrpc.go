@@ -489,7 +489,3 @@ func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
 func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
 	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
-
-func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
-	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
-}
