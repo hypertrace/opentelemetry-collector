@@ -138,54 +138,6 @@ func (col *Collector) Shutdown() {
 	}
 }
 
-// runAndWaitForShutdownEvent waits for one of the shutdown events that can happen.
-func (col *Collector) runAndWaitForShutdownEvent(ctx context.Context) error {
-	col.service.telemetry.Logger.Info("Everything is ready. Begin running and processing data.")
-
-	col.signalsChannel = make(chan os.Signal, 1)
-	// Only notify with SIGTERM and SIGINT if graceful shutdown is enabled.
-	if !col.set.DisableGracefulShutdown {
-		signal.Notify(col.signalsChannel, os.Interrupt, syscall.SIGTERM)
-	}
-
-	col.setCollectorState(Running)
-LOOP:
-	for {
-		select {
-		case err := <-col.set.ConfigProvider.Watch():
-			if err != nil {
-				col.service.telemetry.Logger.Error("Config watch failed", zap.Error(err))
-				break LOOP
-			}
-
-			col.service.telemetry.Logger.Warn("Config updated, restart service")
-			col.setCollectorState(Closing)
-
-			if err = col.service.Shutdown(ctx); err != nil {
-				return fmt.Errorf("failed to shutdown the retiring config: %w", err)
-			}
-			if err = col.setupConfigurationComponents(ctx); err != nil {
-				return fmt.Errorf("failed to setup configuration components: %w", err)
-			}
-		case err := <-col.asyncErrorChannel:
-			col.service.telemetry.Logger.Error("Asynchronous error received, terminating process", zap.Error(err))
-			break LOOP
-		case s := <-col.signalsChannel:
-			col.service.telemetry.Logger.Info("Received signal from OS", zap.String("signal", s.String()))
-			break LOOP
-		case <-col.shutdownChan:
-			col.service.telemetry.Logger.Info("Received shutdown request")
-			break LOOP
-		case <-ctx.Done():
-			col.service.telemetry.Logger.Info("Context done, terminating process", zap.Error(ctx.Err()))
-
-			// Call shutdown with background context as the passed in context has been canceled
-			return col.shutdown(context.Background())
-		}
-	}
-	return col.shutdown(ctx)
-}
-
 // ConfigPostProcessor allows to intercept the final config and do changes in the factories or
 // pipelines. For further information refer to the issue:
 // https://github.com/open-telemetry/opentelemetry-collector/issues/3023
