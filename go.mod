@@ -19,8 +19,8 @@ require (
 	github.com/shirou/gopsutil/v3 v3.22.8
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.5.0
-	github.com/stretchr/testify v1.8.0
-	go.opencensus.io v0.23.0
+	github.com/stretchr/testify v1.8.1
+	go.opencensus.io v0.24.0
 	go.opentelemetry.io/collector/pdata v0.61.0
 	go.opentelemetry.io/collector/semconv v0.61.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.36.0
