@@ -29,7 +29,6 @@ import (
 	"go.uber.org/zap"
 
 	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/extension"
 	"go.opentelemetry.io/collector/otelcol/internal/grpclog"
@@ -151,7 +150,7 @@ func (col *Collector) Shutdown() {
 // pipelines. For further information refer to the issue:
 // https://github.com/open-telemetry/opentelemetry-collector/issues/3023
 type ConfigPostProcessor interface {
-	Process(c *config.Config)
+	Process(c *Config)
 }
 
 // setupConfigurationComponents loads the config and starts the components. If all the steps succeeds it
