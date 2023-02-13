@@ -24,18 +24,18 @@ import (
 	"google.golang.org/grpc"
 
 	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/config"
+	"go.opentelemetry.io/collector/extension"
 	"go.opentelemetry.io/collector/obsreport/obsreporttest"
 )
 
 func TestRegisterClientDialOptionHandler(t *testing.T) {
-	tt, err := obsreporttest.SetupTelemetry()
+	tt, err := obsreporttest.SetupTelemetry(component.NewID("component"))
 	require.NoError(t, err)
 	t.Cleanup(func() { require.NoError(t, tt.Shutdown(context.Background())) })
 
 	gcs := &GRPCClientSettings{}
-	opts, err := gcs.ToDialOptions(
-		&mockHost{ext: map[config.ComponentID]component.Extension{}},
+	opts, err := gcs.toDialOptions(
+		&mockHost{ext: map[component.ID]extension.Extension{}},
 		tt.TelemetrySettings,
 	)
 	require.NoError(t, err)
@@ -48,8 +48,8 @@ func TestRegisterClientDialOptionHandler(t *testing.T) {
 		})
 	})
 	gcs = &GRPCClientSettings{}
-	opts, err = gcs.ToDialOptions(
-		&mockHost{ext: map[config.ComponentID]component.Extension{}},
+	opts, err = gcs.toDialOptions(
+		&mockHost{ext: map[component.ID]extension.Extension{}},
 		tt.TelemetrySettings,
 	)
 	assert.NoError(t, err)
