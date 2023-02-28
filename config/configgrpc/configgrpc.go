@@ -32,7 +32,6 @@ import (
 	"go.opentelemetry.io/collector/config/confignet"
 	"go.opentelemetry.io/collector/config/configopaque"
 	"go.opentelemetry.io/collector/config/configtls"
-	"go.opentelemetry.io/collector/config/internal"
 	"go.opentelemetry.io/collector/extension/auth"
 )
 
@@ -300,10 +299,11 @@ func (gss *GRPCServerSettings) ToServer(host component.Host, settings component.
 }
 
 func (gss *GRPCServerSettings) toServerOption(host component.Host, settings component.TelemetrySettings) ([]grpc.ServerOption, error) {
-	switch gss.NetAddr.Transport {
-	case "tcp", "tcp4", "tcp6", "udp", "udp4", "udp6":
-		internal.WarnOnUnspecifiedHost(settings.Logger, gss.NetAddr.Endpoint)
-	}
+	// Warning commented out for now. ENG-27501
+	// switch gss.NetAddr.Transport {
+	// case "tcp", "tcp4", "tcp6", "udp", "udp4", "udp6":
+	// 	internal.WarnOnUnspecifiedHost(settings.Logger, gss.NetAddr.Endpoint)
+	// }
 
 	var opts []grpc.ServerOption
 
