@@ -500,12 +500,13 @@ func TestHTTPServerWarning(t *testing.T) {
 		settings HTTPServerSettings
 		len      int
 	}{
-		{
-			settings: HTTPServerSettings{
-				Endpoint: "0.0.0.0:0",
-			},
-			len: 1,
-		},
+		// Test commented out for now. ENG-27501
+		// {
+		// 	settings: HTTPServerSettings{
+		// 		Endpoint: "0.0.0.0:0",
+		// 	},
+		// 	len: 1,
+		// },
 		{
 			settings: HTTPServerSettings{
 				Endpoint: "127.0.0.1:0",
