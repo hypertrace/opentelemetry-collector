@@ -32,11 +32,14 @@ import (
 	"go.opentelemetry.io/collector/config/confignet"
 	"go.opentelemetry.io/collector/config/configopaque"
 	"go.opentelemetry.io/collector/config/configtls"
-	"go.opentelemetry.io/collector/config/internal"
 	"go.opentelemetry.io/collector/extension/auth"
 )
 
 var errMetadataNotFound = errors.New("no request metadata found")
+
+type ClientDialOptionHandler func() grpc.DialOption
+
+var clientOptionHandlerList = make([]ClientDialOptionHandler, 0)
 
 // KeepaliveClientConfig exposes the keepalive.ClientParameters to be used by the exporter.
 // Refer to the original data-structure for the meaning of each parameter:
@@ -89,6 +92,9 @@ type GRPCClientSettings struct {
 
 	// Auth configuration for outgoing RPCs.
 	Auth *configauth.Authentication `mapstructure:"auth"`
+
+	// SkipGlobalClientOption defines config if the global client interceptors need to be used
+	SkipGlobalClientOption bool `mapstructure:"skip_global_client_option"`
 }
 
 // KeepaliveServerConfig is the configuration for keepalive.
@@ -262,6 +268,15 @@ func (gcs *GRPCClientSettings) toDialOptions(host component.Host, settings compo
 	opts = append(opts, grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor(otelOpts...)))
 	opts = append(opts, grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor(otelOpts...)))
 
+	if !gcs.SkipGlobalClientOption {
+		for _, handler := range clientOptionHandlerList {
+			opt := handler()
+			if opt != nil {
+				opts = append(opts, opt)
+			}
+		}
+	}
+
 	return opts, nil
 }
 
@@ -284,10 +299,11 @@ func (gss *GRPCServerSettings) ToServer(host component.Host, settings component.
 }
 
 func (gss *GRPCServerSettings) toServerOption(host component.Host, settings component.TelemetrySettings) ([]grpc.ServerOption, error) {
-	switch gss.NetAddr.Transport {
-	case "tcp", "tcp4", "tcp6", "udp", "udp4", "udp6":
-		internal.WarnOnUnspecifiedHost(settings.Logger, gss.NetAddr.Endpoint)
-	}
+	// Warning commented out for now. ENG-27501
+	// switch gss.NetAddr.Transport {
+	// case "tcp", "tcp4", "tcp6", "udp", "udp4", "udp6":
+	// 	internal.WarnOnUnspecifiedHost(settings.Logger, gss.NetAddr.Endpoint)
+	// }
 
 	var opts []grpc.ServerOption
 
@@ -453,4 +469,8 @@ func authStreamServerInterceptor(srv any, stream grpc.ServerStream, _ *grpc.Stre
 	}
 
 	return handler(srv, wrapServerStream(ctx, stream))
+}
+
+func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
+	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
