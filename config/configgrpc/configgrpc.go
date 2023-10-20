@@ -39,6 +39,10 @@ import (
 
 var errMetadataNotFound = errors.New("no request metadata found")
 
+type ClientDialOptionHandler func() grpc.DialOption
+
+var clientOptionHandlerList = make([]ClientDialOptionHandler, 0)
+
 // KeepaliveClientConfig exposes the keepalive.ClientParameters to be used by the exporter.
 // Refer to the original data-structure for the meaning of each parameter:
 // https://godoc.org/google.golang.org/grpc/keepalive#ClientParameters
@@ -103,6 +107,9 @@ type ClientConfig struct {
 
 	// Auth configuration for outgoing RPCs.
 	Auth *configauth.Authentication `mapstructure:"auth,omitempty"`
+
+	// SkipGlobalClientOption defines config if the global client interceptors need to be used
+	SkipGlobalClientOption bool `mapstructure:"skip_global_client_option"`
 }
 
 // NewDefaultClientConfig returns a new instance of ClientConfig with default values.
@@ -368,6 +375,15 @@ func (gcs *ClientConfig) getGrpcDialOptions(
 		}
 	}
 
+	if !gcs.SkipGlobalClientOption {
+		for _, handler := range clientOptionHandlerList {
+			opt := handler()
+			if opt != nil {
+				opts = append(opts, opt)
+			}
+		}
+	}
+
 	return opts, nil
 }
 
@@ -588,4 +604,8 @@ func authStreamServerInterceptor(srv any, stream grpc.ServerStream, _ *grpc.Stre
 	}
 
 	return handler(srv, wrapServerStream(ctx, stream))
+}
+
+func RegisterClientDialOptionHandlers(handlers ...ClientDialOptionHandler) {
+	clientOptionHandlerList = append(clientOptionHandlerList, handlers...)
 }
