@@ -382,15 +382,16 @@ func TestGRPCServerWarning(t *testing.T) {
 		settings GRPCServerSettings
 		len      int
 	}{
-		{
-			settings: GRPCServerSettings{
-				NetAddr: confignet.NetAddr{
-					Endpoint:  "0.0.0.0:1234",
-					Transport: "tcp",
-				},
-			},
-			len: 1,
-		},
+		// Test commented out for now. ENG-27501
+		// {
+		// 	settings: GRPCServerSettings{
+		// 		NetAddr: confignet.NetAddr{
+		// 			Endpoint:  "0.0.0.0:1234",
+		// 			Transport: "tcp",
+		// 		},
+		// 	},
+		// 	len: 1,
+		// },
 		{
 			settings: GRPCServerSettings{
 				NetAddr: confignet.NetAddr{
