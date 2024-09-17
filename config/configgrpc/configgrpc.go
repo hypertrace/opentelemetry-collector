@@ -8,6 +8,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"google.golang.org/grpc/resolver"
 	"strings"
 	"time"
 
@@ -224,6 +225,7 @@ func (gcs *ClientConfig) ToClientConn(ctx context.Context, host component.Host, 
 		return nil, err
 	}
 	opts = append(opts, extraOpts...)
+	resolver.SetDefaultScheme("passthrough")
 	return grpc.NewClient(gcs.sanitizedEndpoint(), opts...)
 }
 
