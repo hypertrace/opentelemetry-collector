@@ -230,7 +230,7 @@ func (gcs *ClientConfig) ToClientConn(_ context.Context, host component.Host, se
 		return nil, err
 	}
 	opts = append(opts, extraOpts...)
-	return grpc.NewClient(gcs.sanitizedEndpoint(), opts...)
+	return grpc.DialContext(ctx, gcs.sanitizedEndpoint(), opts...)
 }
 
 func (gcs *ClientConfig) toDialOptions(host component.Host, settings component.TelemetrySettings) ([]grpc.DialOption, error) {
