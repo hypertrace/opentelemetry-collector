@@ -275,7 +275,7 @@ func (gcs *ClientConfig) ToClientConnWithOptions(
 	if err != nil {
 		return nil, err
 	}
-	return grpc.NewClient(gcs.sanitizedEndpoint(), grpcOpts...)
+	return grpc.DialContext(ctx, gcs.sanitizedEndpoint(), grpcOpts...)
 }
 
 func (gcs *ClientConfig) getGrpcDialOptions(
