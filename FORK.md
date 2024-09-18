@@ -21,4 +21,5 @@ git push --tags
 - In `config/configgrpc/configgrpc.go` we added the ability to add extra `ClientDialOptionHandler`. Also a unit test for this in `config/configgrpc/configgrpcclientdialoptionhandler_test.go`. Also commented out warning on servers starting `UnspecifiedHost` aka `0.0.0.0`.
 - In `config/configgrpc/configgrpc_test.go` we commented a unit test checking for a warning on servers starting `UnspecifiedHost` aka `0.0.0.0`.
 - In `config/confighttp/confighttp.go` we commented out warning on servers starting `UnspecifiedHost`.
-- In ` config/confighttp/confighttp_test.go` we commented a unit test checking for a warning on servers starting `UnspecifiedHost`.
+- In `config/confighttp/confighttp_test.go` we commented a unit test checking for a warning on servers starting `UnspecifiedHost`.
+- In `config/configgrpc/configgrpc.go` we reverted back to use `grpc.DialContext` method instead of `grpc.NewClient`
