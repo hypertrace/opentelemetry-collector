@@ -267,7 +267,7 @@ func (gcs *ClientConfig) ToClientConn(
 	if err != nil {
 		return nil, err
 	}
-	return grpc.NewClient(gcs.sanitizedEndpoint(), grpcOpts...)
+	return grpc.DialContext(ctx, gcs.sanitizedEndpoint(), grpcOpts...)
 }
 
 // ToClientConnWithOptions is the same as [ClientConfig.ToClientConn].
