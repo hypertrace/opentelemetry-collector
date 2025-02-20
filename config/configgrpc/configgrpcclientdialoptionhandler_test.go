@@ -14,7 +14,6 @@ import (
 
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/component/componenttest"
-	"go.opentelemetry.io/collector/extension"
 )
 
 func TestRegisterClientDialOptionHandler(t *testing.T) {
@@ -25,7 +24,7 @@ func TestRegisterClientDialOptionHandler(t *testing.T) {
 	gcs := &ClientConfig{}
 	opts, err := gcs.getGrpcDialOptions(
 		context.Background(),
-		&mockHost{ext: map[component.ID]extension.Extension{}},
+		&mockHost{ext: map[component.ID]component.Component{}},
 		tt.TelemetrySettings(),
 		[]ToClientConnOption{},
 	)
@@ -41,7 +40,7 @@ func TestRegisterClientDialOptionHandler(t *testing.T) {
 	gcs = &ClientConfig{}
 	opts, err = gcs.getGrpcDialOptions(
 		context.Background(),
-		&mockHost{ext: map[component.ID]extension.Extension{}},
+		&mockHost{ext: map[component.ID]component.Component{}},
 		tt.TelemetrySettings(),
 		[]ToClientConnOption{},
 	)
